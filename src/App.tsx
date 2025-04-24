@@ -15,6 +15,9 @@ function App() {
 
   // Handler for updating dimensions
   const handleDimensionChange = (dimension: 'height' | 'width' | 'depth', value: number) => {
+    // Always keep height at 100% regardless of what's passed
+    if (dimension === 'height') return;
+    
     setDimensions(prev => ({
       ...prev,
       [dimension]: value

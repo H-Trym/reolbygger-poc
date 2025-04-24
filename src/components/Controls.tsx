@@ -27,6 +27,11 @@ export function Controls({
     onModelCountChange(1)
   }
 
+  const handleResetDimensions = () => {
+    onDimensionChange('width', 100)
+    onDimensionChange('depth', 100)
+  }
+
   return (
     <div style={{ 
       padding: '24px',
@@ -148,21 +153,25 @@ export function Controls({
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
               <label style={{ fontSize: '14px' }}>Height</label>
-              <span style={{ color: '#a0a0a0' }}>{dimensions.height}%</span>
+              <span style={{ color: '#a0a0a0' }}>100% (Fixed)</span>
             </div>
             <input 
               type="range" 
               min="50" 
               max="200" 
-              value={dimensions.height} 
-              onChange={(e) => onDimensionChange('height', Number(e.target.value))}
-              style={{ width: '100%' }}
+              value={100} 
+              disabled
+              style={{ 
+                width: '100%', 
+                opacity: 0.5,
+                cursor: 'not-allowed'
+              }}
             />
           </div>
 
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <label style={{ fontSize: '14px' }}>Width</label>
+              <label style={{ fontSize: '14px' }}>Depth</label>
               <span style={{ color: '#a0a0a0' }}>{dimensions.width}%</span>
             </div>
             <input 
@@ -177,7 +186,7 @@ export function Controls({
 
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <label style={{ fontSize: '14px' }}>Depth</label>
+              <label style={{ fontSize: '14px' }}>Width</label>
               <span style={{ color: '#a0a0a0' }}>{dimensions.depth}%</span>
             </div>
             <input 
@@ -189,6 +198,26 @@ export function Controls({
               style={{ width: '100%' }}
             />
           </div>
+
+          <button
+            onClick={handleResetDimensions}
+            style={{
+              padding: '12px',
+              backgroundColor: '#3a3a3a',
+              border: 'none',
+              borderRadius: '4px',
+              color: '#ffffff',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '500',
+              marginTop: '8px',
+              transition: 'background-color 0.2s'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#4a4a4a'}
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+          >
+            Reset Dimensions
+          </button>
         </div>
       </div>
 
