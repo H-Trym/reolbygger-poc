@@ -1,6 +1,11 @@
 import { useState } from 'react'
 
-export function Controls() {
+interface ControlsProps {
+  modelCount: number
+  onModelCountChange: (count: number) => void
+}
+
+export function Controls({ modelCount, onModelCountChange }: ControlsProps) {
   const [rotation, setRotation] = useState(0)
   const [scale, setScale] = useState(1)
   const [color, setColor] = useState('#ffffff')
@@ -9,6 +14,14 @@ export function Controls() {
   const [depth, setDepth] = useState(100)
   const [material, setMaterial] = useState('wood')
   const [shelves, setShelves] = useState(3)
+
+  const handleDuplicate = () => {
+    onModelCountChange(modelCount + 1)
+  }
+
+  const handleReset = () => {
+    onModelCountChange(1)
+  }
 
   return (
     <div style={{ 
@@ -44,6 +57,79 @@ export function Controls() {
         }}>Shelf Controls</h2>
       </div>
       
+      <div style={{
+        backgroundColor: '#2a2a2a',
+        padding: '16px',
+        borderRadius: '8px'
+      }}>
+        <h3 style={{ 
+          margin: '0 0 12px 0',
+          fontSize: '16px',
+          fontWeight: '500',
+          color: '#a0a0a0'
+        }}>Model Management</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <button
+              onClick={handleDuplicate}
+              style={{
+                flex: 1,
+                padding: '12px',
+                backgroundColor: '#3a3a3a',
+                border: 'none',
+                borderRadius: '4px',
+                color: '#ffffff',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '500',
+                transition: 'background-color 0.2s'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#4a4a4a'}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+            >
+              Duplicate Shelf
+            </button>
+            <button
+              onClick={handleReset}
+              style={{
+                flex: 1,
+                padding: '12px',
+                backgroundColor: '#3a3a3a',
+                border: 'none',
+                borderRadius: '4px',
+                color: '#ffffff',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '500',
+                transition: 'background-color 0.2s'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#4a4a4a'}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+            >
+              Reset
+            </button>
+          </div>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            padding: '8px',
+            backgroundColor: '#3a3a3a',
+            borderRadius: '4px'
+          }}>
+            <span style={{ fontSize: '14px' }}>Number of Shelves</span>
+            <span style={{ 
+              backgroundColor: '#4a4a4a',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              fontSize: '14px'
+            }}>
+              {modelCount}
+            </span>
+          </div>
+        </div>
+      </div>
+
       <div style={{
         backgroundColor: '#2a2a2a',
         padding: '16px',
