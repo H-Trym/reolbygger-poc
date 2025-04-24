@@ -52,7 +52,7 @@ export function Controls({
       }}>
         <img 
           src="/white-shelf.png" 
-          alt="Shelf Icon" 
+          alt="Hylle Ikon" 
           style={{ 
             width: '40px', 
             height: '40px',
@@ -63,7 +63,7 @@ export function Controls({
           margin: 0,
           fontSize: '24px',
           fontWeight: '600'
-        }}>Shelf Controls</h2>
+        }}>Hyllekontroller</h2>
       </div>
       
       <div style={{
@@ -76,7 +76,7 @@ export function Controls({
           fontSize: '16px',
           fontWeight: '500',
           color: '#a0a0a0'
-        }}>Model Management</h3>
+        }}>Modellhåndtering</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div style={{ display: 'flex', gap: '12px' }}>
             <button
@@ -96,7 +96,7 @@ export function Controls({
               onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#4a4a4a'}
               onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
             >
-              Duplicate Shelf
+              Dupliser Hylle
             </button>
             <button
               onClick={handleReset}
@@ -115,7 +115,7 @@ export function Controls({
               onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#4a4a4a'}
               onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
             >
-              Reset
+              Tilbakestill
             </button>
           </div>
           <div style={{ 
@@ -126,7 +126,7 @@ export function Controls({
             backgroundColor: '#3a3a3a',
             borderRadius: '4px'
           }}>
-            <span style={{ fontSize: '14px' }}>Number of Shelves</span>
+            <span style={{ fontSize: '14px' }}>Antall Hyller</span>
             <span style={{ 
               backgroundColor: '#4a4a4a',
               padding: '4px 8px',
@@ -148,12 +148,12 @@ export function Controls({
           fontSize: '16px',
           fontWeight: '500',
           color: '#a0a0a0'
-        }}>Dimensions</h3>
+        }}>Dimensjoner</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <label style={{ fontSize: '14px' }}>Height</label>
-              <span style={{ color: '#a0a0a0' }}>100% (Fixed)</span>
+              <label style={{ fontSize: '14px' }}>Høyde</label>
+              <span style={{ color: '#a0a0a0' }}>100% (Fast)</span>
             </div>
             <input 
               type="range" 
@@ -171,7 +171,7 @@ export function Controls({
 
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <label style={{ fontSize: '14px' }}>Depth</label>
+              <label style={{ fontSize: '14px' }}>Dybde</label>
               <span style={{ color: '#a0a0a0' }}>{dimensions.width}%</span>
             </div>
             <input 
@@ -186,7 +186,7 @@ export function Controls({
 
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <label style={{ fontSize: '14px' }}>Width</label>
+              <label style={{ fontSize: '14px' }}>Bredde</label>
               <span style={{ color: '#a0a0a0' }}>{dimensions.depth}%</span>
             </div>
             <input 
@@ -216,7 +216,7 @@ export function Controls({
             onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#4a4a4a'}
             onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
           >
-            Reset Dimensions
+            Tilbakestill Dimensjoner
           </button>
         </div>
       </div>
@@ -231,10 +231,10 @@ export function Controls({
           fontSize: '16px',
           fontWeight: '500',
           color: '#a0a0a0'
-        }}>Appearance</h3>
+        }}>Utseende</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <label style={{ fontSize: '14px', display: 'block', marginBottom: '8px' }}>Color</label>
+            <label style={{ fontSize: '14px', display: 'block', marginBottom: '8px' }}>Farge</label>
             <input 
               type="color" 
               value={modelColor} 
