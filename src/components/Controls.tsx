@@ -22,11 +22,27 @@ export function Controls() {
       color: '#ffffff',
       fontFamily: 'system-ui, -apple-system, sans-serif'
     }}>
-      <h2 style={{ 
-        margin: '0 0 16px 0',
-        fontSize: '24px',
-        fontWeight: '600'
-      }}>Shelf Controls</h2>
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: '12px',
+        marginBottom: '16px'
+      }}>
+        <img 
+          src="/white-shelf.png" 
+          alt="Shelf Icon" 
+          style={{ 
+            width: '40px', 
+            height: '40px',
+            objectFit: 'contain'
+          }} 
+        />
+        <h2 style={{ 
+          margin: 0,
+          fontSize: '24px',
+          fontWeight: '600'
+        }}>Shelf Controls</h2>
+      </div>
       
       <div style={{
         backgroundColor: '#2a2a2a',
