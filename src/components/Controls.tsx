@@ -3,12 +3,16 @@ import { useState } from 'react'
 interface ControlsProps {
   modelCount: number
   onModelCountChange: (count: number) => void
+  modelColor: string
+  onModelColorChange: (color: string) => void
 }
 
-export function Controls({ modelCount, onModelCountChange }: ControlsProps) {
-  const [rotation, setRotation] = useState(0)
-  const [scale, setScale] = useState(1)
-  const [color, setColor] = useState('#ffffff')
+export function Controls({ 
+  modelCount, 
+  onModelCountChange, 
+  modelColor, 
+  onModelColorChange 
+}: ControlsProps) {
   const [height, setHeight] = useState(100)
   const [width, setWidth] = useState(100)
   const [depth, setDepth] = useState(100)
@@ -129,52 +133,6 @@ export function Controls({ modelCount, onModelCountChange }: ControlsProps) {
           </div>
         </div>
       </div>
-
-      <div style={{
-        backgroundColor: '#2a2a2a',
-        padding: '16px',
-        borderRadius: '8px'
-      }}>
-        <h3 style={{ 
-          margin: '0 0 12px 0',
-          fontSize: '16px',
-          fontWeight: '500',
-          color: '#a0a0a0'
-        }}>Transform</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <label style={{ fontSize: '14px' }}>Rotation</label>
-              <span style={{ color: '#a0a0a0' }}>{rotation}°</span>
-            </div>
-            <input 
-              type="range" 
-              min="0" 
-              max="360" 
-              value={rotation} 
-              onChange={(e) => setRotation(Number(e.target.value))}
-              style={{ width: '100%' }}
-            />
-          </div>
-
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <label style={{ fontSize: '14px' }}>Scale</label>
-              <span style={{ color: '#a0a0a0' }}>{scale}x</span>
-            </div>
-            <input 
-              type="range" 
-              min="0.1" 
-              max="2" 
-              step="0.1"
-              value={scale} 
-              onChange={(e) => setScale(Number(e.target.value))}
-              style={{ width: '100%' }}
-            />
-          </div>
-        </div>
-      </div>
-
       <div style={{
         backgroundColor: '#2a2a2a',
         padding: '16px',
@@ -285,8 +243,8 @@ export function Controls({ modelCount, onModelCountChange }: ControlsProps) {
             <label style={{ fontSize: '14px', display: 'block', marginBottom: '8px' }}>Color</label>
             <input 
               type="color" 
-              value={color} 
-              onChange={(e) => setColor(e.target.value)}
+              value={modelColor} 
+              onChange={(e) => onModelColorChange(e.target.value)}
               style={{
                 width: '100%',
                 height: '40px',

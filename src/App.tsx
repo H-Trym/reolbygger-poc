@@ -4,13 +4,19 @@ import { Controls } from './components/Controls'
 
 function App() {
   const [modelCount, setModelCount] = useState(1)
+  const [modelColor, setModelColor] = useState('#ffffff')
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      <Scene modelCount={modelCount} />
+      <Scene 
+        modelCount={modelCount} 
+        modelColor={modelColor}
+      />
       <Controls 
         modelCount={modelCount} 
-        onModelCountChange={setModelCount} 
+        onModelCountChange={setModelCount}
+        modelColor={modelColor}
+        onModelColorChange={setModelColor}
       />
     </div>
   )

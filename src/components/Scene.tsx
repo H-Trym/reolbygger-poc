@@ -1,7 +1,7 @@
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, useGLTF } from '@react-three/drei'
 import { Suspense, useMemo, useRef, useEffect, useState } from 'react'
-import { Group, Box3, Vector3, Object3D } from 'three'
+import { Group, Box3, Vector3, Object3D, Color, MeshStandardMaterial } from 'three'
 
 // Preload the GLB outside of the component for measurement
 useGLTF.preload('/shelf.glb')
@@ -10,16 +10,50 @@ interface ModelProps {
   position: [number, number, number]
   centeredGroup: Group | null // Pass the centered group geometry
   scale: number
+  color: string
 }
 
-function Model({ position, centeredGroup, scale }: ModelProps) {
+function Model({ position, centeredGroup, scale, color }: ModelProps) {
   const groupRef = useRef<Group>(null!)
 
   // Clone the pre-centered group for this instance
   const modelInstance = useMemo(() => {
     if (!centeredGroup) return null
-    return centeredGroup.clone()
-  }, [centeredGroup])
+    const clone = centeredGroup.clone()
+    
+    // Apply color to all materials in the model
+    clone.traverse((child: Object3D) => {
+      // Check if the child has a material property (like a Mesh)
+      if ('material' in child && child.material) {
+        // If it's a single material
+        if (!Array.isArray(child.material)) {
+          // Create a new material to avoid modifying the shared one
+          const newMaterial = new MeshStandardMaterial()
+          // Copy properties from the original material
+          if (child.material instanceof MeshStandardMaterial) {
+            newMaterial.copy(child.material)
+          }
+          // Set the new color
+          newMaterial.color = new Color(color)
+          // Apply the new material
+          child.material = newMaterial
+        } 
+        // If it's an array of materials
+        else if (Array.isArray(child.material)) {
+          child.material = child.material.map(mat => {
+            if (mat instanceof MeshStandardMaterial) {
+              const newMat = new MeshStandardMaterial().copy(mat)
+              newMat.color = new Color(color)
+              return newMat
+            }
+            return mat
+          })
+        }
+      }
+    })
+    
+    return clone
+  }, [centeredGroup, color])
 
   if (!modelInstance) return null // Don't render if geometry isn't ready
 
@@ -33,9 +67,10 @@ function Model({ position, centeredGroup, scale }: ModelProps) {
 
 interface SceneProps {
   modelCount: number
+  modelColor: string
 }
 
-export function Scene({ modelCount }: SceneProps) {
+export function Scene({ modelCount, modelColor }: SceneProps) {
   const [modelDimensions, setModelDimensions] = useState<{width: number, depth: number}>({ width: 0, depth: 0 })
   const [centeredGroup, setCenteredGroup] = useState<Group | null>(null)
   const modelScale = 5
@@ -115,7 +150,8 @@ export function Scene({ modelCount }: SceneProps) {
               key={index} 
               position={position} 
               centeredGroup={centeredGroup} 
-              scale={modelScale} 
+              scale={modelScale}
+              color={modelColor} 
             />
           ))}
         </Suspense>
