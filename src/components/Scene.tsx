@@ -8,13 +8,25 @@ useGLTF.preload('/shelf.glb')
 
 interface ModelProps {
   position: [number, number, number]
-  centeredGroup: Group | null // Pass the centered group geometry
-  scale: number
+  centeredGroup: Group | null
   color: string
+  dimensions: {
+    height: number
+    width: number
+    depth: number
+  }
 }
 
-function Model({ position, centeredGroup, scale, color }: ModelProps) {
+function Model({ position, centeredGroup, color, dimensions }: ModelProps) {
   const groupRef = useRef<Group>(null!)
+  
+  // Base scale factor
+  const baseScale = 5
+  
+  // Calculate scales as percentages
+  const scaleX = (dimensions.width / 100) * baseScale
+  const scaleY = (dimensions.height / 100) * baseScale
+  const scaleZ = (dimensions.depth / 100) * baseScale
 
   // Clone the pre-centered group for this instance
   const modelInstance = useMemo(() => {
@@ -55,12 +67,12 @@ function Model({ position, centeredGroup, scale, color }: ModelProps) {
     return clone
   }, [centeredGroup, color])
 
-  if (!modelInstance) return null // Don't render if geometry isn't ready
+  if (!modelInstance) return null
 
   return <primitive 
     ref={groupRef} 
     object={modelInstance} 
-    scale={scale} 
+    scale={[scaleX, scaleY, scaleZ]} // Apply different scale per axis
     position={position} 
   />
 }
@@ -68,13 +80,18 @@ function Model({ position, centeredGroup, scale, color }: ModelProps) {
 interface SceneProps {
   modelCount: number
   modelColor: string
+  dimensions: {
+    height: number
+    width: number
+    depth: number
+  }
 }
 
-export function Scene({ modelCount, modelColor }: SceneProps) {
+export function Scene({ modelCount, modelColor, dimensions }: SceneProps) {
   const [modelDimensions, setModelDimensions] = useState<{width: number, depth: number}>({ width: 0, depth: 0 })
   const [centeredGroup, setCenteredGroup] = useState<Group | null>(null)
-  const modelScale = 5
-  const gap = 0 // Reduced gap between models
+  const baseScale = 5 // Base scale for measurement 
+  const gap = 0 // Gap between models
   
   const { scene: originalScene } = useGLTF('/shelf.glb')
 
@@ -92,7 +109,7 @@ export function Scene({ modelCount, modelColor }: SceneProps) {
     modelClone.position.sub(center)
     
     // Apply scale for measurement
-    group.scale.set(modelScale, modelScale, modelScale)
+    group.scale.set(baseScale, baseScale, baseScale)
     
     // Measure the dimensions after centering and scaling
     const scaledBox = new Box3().setFromObject(group)
@@ -100,23 +117,25 @@ export function Scene({ modelCount, modelColor }: SceneProps) {
     const depth = scaledBox.max.z - scaledBox.min.z
     setModelDimensions({ width, depth })
 
-    // Reset scale before storing the group (scale is applied in Model component)
+    // Reset scale before storing the group
     group.scale.set(1, 1, 1)
     setCenteredGroup(group)
+  }, [originalScene, baseScale])
 
-  }, [originalScene, modelScale])
-
-  // Calculate positions based on measured dimensions - now along Z-axis
+  // Calculate positions based on measured dimensions and current scale
   const modelPositions = useMemo(() => {
-    if (modelDimensions.depth === 0) return [] // Don't calculate positions until dimensions are known
-    const totalSpacing = modelDimensions.depth + gap
+    if (modelDimensions.depth === 0) return []
+    
+    // Use the current depth scale to calculate spacing
+    const scaledDepth = modelDimensions.depth * (dimensions.depth / 100)
+    const totalSpacing = scaledDepth + gap
+    
     return Array.from({ length: modelCount }, (_, i) => {
-      // Position along Z-axis (side-by-side from camera view)
       return [0, 0, i * totalSpacing] as [number, number, number]
     })
-  }, [modelCount, modelDimensions.depth, gap])
+  }, [modelCount, modelDimensions.depth, dimensions.depth, gap])
 
-  // Calculate the center of the model group
+  // Update groupCenter and other calculations based on new positions
   const groupCenter = useMemo(() => {
     if (modelCount === 0 || modelPositions.length === 0) return new Vector3(0, 0, 0)
     const firstModelZ = modelPositions[0][2]
@@ -127,22 +146,24 @@ export function Scene({ modelCount, modelColor }: SceneProps) {
 
   // Adjust camera position to be looking at models side-by-side
   const cameraPosition = useMemo(() => {
-    const requiredZView = modelCount * (modelDimensions.depth + gap)
-    const xDistance = Math.max(5, requiredZView / 2)
+    // Consider current width for camera position
+    const scaledWidth = modelDimensions.width * (dimensions.width / 100)
+    const requiredZView = modelCount * (modelDimensions.depth * (dimensions.depth / 100) + gap)
+    const xDistance = Math.max(5, Math.max(scaledWidth, requiredZView) / 1.5)
     return [xDistance, 2, groupCenter.z] as [number, number, number]
-  }, [groupCenter, modelCount, modelDimensions.depth, gap])
+  }, [groupCenter, modelCount, modelDimensions, dimensions, gap])
   
   // Adjust max distance 
-  const maxDistance = Math.max(10, modelCount * (modelDimensions.depth + gap))
+  const maxDistance = Math.max(10, modelCount * (modelDimensions.depth * (dimensions.depth / 100) + gap))
   
   // Adjust grid size
-  const gridSize = Math.max(10, modelCount * (modelDimensions.depth + gap) * 1.5)
+  const gridSize = Math.max(10, modelCount * (modelDimensions.depth * (dimensions.depth / 100) + gap) * 1.5)
 
   return (
     <div style={{ flex: 1, height: '100vh' }}>
       <Canvas camera={{ position: cameraPosition, fov: 50 }}>
         <ambientLight intensity={0.5} />
-        <pointLight position={[5, 10, groupCenter.z]} /> {/* Center light */} 
+        <pointLight position={[5, 10, groupCenter.z]} />
         <gridHelper args={[gridSize, 10]} position={[0, -0.45, groupCenter.z]} />
         <Suspense fallback={null}>
           {modelPositions.map((position, index) => (
@@ -150,13 +171,13 @@ export function Scene({ modelCount, modelColor }: SceneProps) {
               key={index} 
               position={position} 
               centeredGroup={centeredGroup} 
-              scale={modelScale}
-              color={modelColor} 
+              color={modelColor}
+              dimensions={dimensions}
             />
           ))}
         </Suspense>
         <OrbitControls 
-          target={groupCenter.toArray()} // Target the center of the group
+          target={groupCenter.toArray()}
           minDistance={1} 
           maxDistance={maxDistance}
           enablePan={false}
