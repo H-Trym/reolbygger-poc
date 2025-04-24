@@ -51,7 +51,7 @@ export function Controls({
         marginBottom: '16px'
       }}>
         <img 
-          src="/white-shelf.png" 
+          src={import.meta.env.BASE_URL + 'white-shelf.png'}
           alt="Hylle Ikon" 
           style={{ 
             width: '40px', 

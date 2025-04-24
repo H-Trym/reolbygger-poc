@@ -93,7 +93,9 @@ export function Scene({ modelCount, modelColor, dimensions }: SceneProps) {
   const baseScale = 5 // Base scale for measurement 
   const gap = 0 // Gap between models
   
-  const { scene: originalScene } = useGLTF('/shelf.glb')
+  // const { scene: originalScene } = useGLTF('/shelf.glb')
+  const { scene: originalScene } = useGLTF(import.meta.env.BASE_URL + 'shelf.glb')
+  useGLTF.preload(import.meta.env.BASE_URL + 'shelf.glb')
 
   // Effect to create and measure the centered model once
   useEffect(() => {
