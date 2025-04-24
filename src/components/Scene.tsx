@@ -162,7 +162,7 @@ export function Scene({ modelCount, modelColor, dimensions }: SceneProps) {
   const gridSize = Math.max(10, modelCount * (modelDimensions.depth * (dimensions.depth / 100) + gap) * 1.5)
 
   return (
-    <div style={{ flex: 1, height: '100vh' }}>
+    <div style={{ width: '100%', height: '100%' }}>
       <Canvas camera={{ position: cameraPosition, fov: 50 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[5, 10, groupCenter.z]} />

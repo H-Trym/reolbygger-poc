@@ -36,13 +36,13 @@ export function Controls({
     <div style={{ 
       padding: '24px',
       backgroundColor: '#1a1a1a',
-      height: '100vh',
-      width: '30vw',
       display: 'flex',
       flexDirection: 'column',
       gap: '24px',
       color: '#ffffff',
-      fontFamily: 'system-ui, -apple-system, sans-serif'
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+      height: '100%',
+      overflowY: 'auto'
     }}>
       <div style={{ 
         display: 'flex', 

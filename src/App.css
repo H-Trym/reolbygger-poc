@@ -1,42 +1,60 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
   text-align: center;
+  overflow: hidden;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Remove existing default styles */
+.logo, .card, .read-the-docs {
+  display: none;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.scene-container {
+  flex: 1;
+  position: relative;
+  min-height: 300px;
+}
+
+.controls-container {
+  background-color: #1a1a1a;
+  border-top: 1px solid #333;
+  max-height: 50vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+/* Desktop layout (min-width: 768px) */
+@media (min-width: 768px) {
+  .app-container {
+    flex-direction: row;
   }
-  to {
-    transform: rotate(360deg);
+
+  .scene-container {
+    flex: 1;
+  }
+
+  .controls-container {
+    width: 350px;
+    max-height: 100vh;
+    border-top: none;
+    border-left: 1px solid #333;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+/* Wider controls for larger screens */
+@media (min-width: 1200px) {
+  .controls-container {
+    width: 30vw;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

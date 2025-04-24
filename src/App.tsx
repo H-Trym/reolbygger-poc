@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Scene } from './components/Scene'
 import { Controls } from './components/Controls'
+import './App.css'
 
 function App() {
   const [modelCount, setModelCount] = useState(1)
@@ -25,20 +26,24 @@ function App() {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
-      <Scene 
-        modelCount={modelCount} 
-        modelColor={modelColor}
-        dimensions={dimensions}
-      />
-      <Controls 
-        modelCount={modelCount} 
-        onModelCountChange={setModelCount}
-        modelColor={modelColor}
-        onModelColorChange={setModelColor}
-        dimensions={dimensions}
-        onDimensionChange={handleDimensionChange}
-      />
+    <div className="app-container">
+      <div className="scene-container">
+        <Scene 
+          modelCount={modelCount} 
+          modelColor={modelColor}
+          dimensions={dimensions}
+        />
+      </div>
+      <div className="controls-container">
+        <Controls 
+          modelCount={modelCount} 
+          onModelCountChange={setModelCount}
+          modelColor={modelColor}
+          onModelColorChange={setModelColor}
+          dimensions={dimensions}
+          onDimensionChange={handleDimensionChange}
+        />
+      </div>
     </div>
   )
 }
